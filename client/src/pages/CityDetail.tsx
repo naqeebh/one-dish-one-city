@@ -4,8 +4,13 @@ export default function CityDetail() {
   const { slug } = useParams()
 
   return (
-    <main style={{ padding: 24 }}>
-      <h1>City: {slug}</h1>
-    </main>
+    <section>
+      <h1 className="text-3xl font-bold capitalize">
+        {slug}
+      </h1>
+      <p className="mt-2 text-neutral-600">
+        Recipe details will load here.
+      </p>
+    </section>
   )
 }
