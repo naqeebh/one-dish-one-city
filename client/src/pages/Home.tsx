@@ -1,10 +1,10 @@
 export default function Home() {
   return (
-    <section>
+    <section className="space-y-2">
       <h1 className="text-3xl font-bold">
-        Explore cities
+        Explore Cities
       </h1>
-      <p className="mt-2 text-neutral-600">
+      <p className="text-neutral-600">
         Click a city on the map to discover its
         signature dish.
       </p>
