@@ -21,8 +21,21 @@ export default function CityDetail() {
       .catch(() => setError('City not found'))
   }, [slug])
 
-  if (error) return <p>{error}</p>
-  if (!city) return <p>Loading…</p>
+if (error) {
+  return (
+    <p className="text-sm text-red-600">
+      {error}
+    </p>
+  )
+}
+
+if (!city) {
+  return (
+    <p className="text-sm text-neutral-500">
+      Loading city…
+    </p>
+  )
+}
 
   return (
     <section>
