@@ -1,3 +1,5 @@
+// This page will fetch city + recipe data from the API (Day 2)
+
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { getCityBySlug } from '../lib/api'
