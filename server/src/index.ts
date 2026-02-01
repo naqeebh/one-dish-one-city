@@ -1,9 +1,16 @@
+import dotenv from 'dotenv'
 import express from 'express'
 import cors from 'cors'
-import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 
+// Load env from server/.env
 dotenv.config()
+
+
+// Safety check (fail fast if env is broken)
+if (!process.env.MONGODB_URI) {
+  throw new Error('MONGODB_URI is not defined')
+}
 
 const app = express()
 const PORT = process.env.PORT || 3000
@@ -17,12 +24,13 @@ app.get('/health', (_req, res) => {
   res.json({ status: 'ok' })
 })
 
-// Routes will go here
-// app.use("/api/cities", cityRoutes)
+// Routes (enable once ready)
+// import cityRoutes from './routes/cities.js'
+// app.use('/cities', cityRoutes)
 
 // Connect DB & start server
 mongoose
-  .connect(process.env.MONGO_URI!)
+  .connect(process.env.MONGODB_URI)
   .then(() => {
     console.log('✅ MongoDB connected')
 
