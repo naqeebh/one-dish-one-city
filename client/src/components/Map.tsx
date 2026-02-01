@@ -17,7 +17,7 @@ export default function Map() {
       style: 'mapbox://styles/mapbox/dark-v11',
       center: [0, 20],
       zoom: 1.5,
-      projection: 'mercator', // 👈 THIS makes it flat
+      projection: 'mercator', // THIS makes it flat
     })
 
     return () => map.remove()
