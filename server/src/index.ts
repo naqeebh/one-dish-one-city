@@ -1,24 +1,40 @@
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
+import express from 'express'
+import cors from 'cors'
+import dotenv from 'dotenv'
+import mongoose from 'mongoose'
 
-const { connectDB } = require('./config/db')
+dotenv.config()
 
-dotenv.config();
+const app = express()
+const PORT = process.env.PORT || 3000
 
-const app = express();
+// Middleware
+app.use(cors())
+app.use(express.json())
 
-app.use(cors());
-app.use(express.json());
+// Health check
+app.get('/health', (_req, res) => {
+  res.json({ status: 'ok' })
+})
 
-connectDB();
+// Routes will go here
+// app.use("/api/cities", cityRoutes)
 
-app.get("/health", (_req, res) => {
-  res.json({ status: "ok" });
-});
+// Connect DB & start server
+mongoose
+  .connect(process.env.MONGO_URI!)
+  .then(() => {
+    console.log('✅ MongoDB connected')
 
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-});
+    app.listen(PORT, () => {
+      console.log(
+        `🚀 Server running on http://localhost:${PORT}`,
+      )
+    })
+  })
+  .catch((error) => {
+    console.error(
+      '❌ MongoDB connection error:',
+      error,
+    )
+  })
