@@ -1,43 +1,35 @@
-import { NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
-const linkClass = ({
-  isActive,
-}: {
-  isActive: boolean
-}) =>
-  isActive
-    ? 'underline font-semibold'
-    : 'hover:underline'
-
-export default function NavBar() {
+export default function Navbar() {
   return (
-    <nav className="flex justify-between p-4 border-b">
-      <NavLink to="/" className="font-bold">
-        One Dish, One City
-      </NavLink>
-      <div className="flex gap-4 text-sm">
-        <NavLink to="/" className={linkClass} end>
-          Home
-        </NavLink>
-        <NavLink
-          to="/favorites"
-          className={linkClass}
+    <header className="border-b">
+      <nav className="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
+        <Link
+          to="/"
+          className="text-lg font-semibold tracking-tight"
         >
-          Favorites
-        </NavLink>
-        <NavLink
-          to="/about"
-          className={linkClass}
-        >
-          About
-        </NavLink>
-        <NavLink
-          to="/contact"
-          className={linkClass}
-        >
-          Contact
-        </NavLink>
-      </div>
-    </nav>
+          One Dish, One City
+        </Link>
+
+        <ul className="flex items-center gap-6 text-sm">
+          <li>
+            <Link
+              to="/"
+              className="text-neutral-600 hover:text-neutral-900"
+            >
+              Home
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/about"
+              className="text-neutral-600 hover:text-neutral-900"
+            >
+              About
+            </Link>
+          </li>
+        </ul>
+      </nav>
+    </header>
   )
 }
