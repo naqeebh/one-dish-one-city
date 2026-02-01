@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getCities } from '../lib/api'
+import Map from '../components/Map'
 
 type City = {
   _id: string
@@ -33,7 +34,7 @@ export default function Home() {
   }, [])
 
   return (
-    <section className="space-y-4">
+    <section className="space-y-6">
       <header className="space-y-2">
         <h1 className="text-3xl font-bold">
           Explore Cities
@@ -43,6 +44,9 @@ export default function Home() {
           signature dish.
         </p>
       </header>
+
+      {/* Map always renders */}
+      <Map />
 
       {loading && (
         <p className="text-sm text-neutral-500">
