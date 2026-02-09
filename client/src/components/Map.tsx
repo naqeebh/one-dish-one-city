@@ -29,9 +29,15 @@ export default function Map() {
     cities.forEach((city) => {
       // Popup HTML (kept as a variable to avoid syntax issues)
       const popupHtml = `<div style="font-family:system-ui;font-size:14px;">
-          <strong>${city.name}, ${city.country}</strong><br/>
-          <span style="opacity:0.8">${city.dish}</span>
-        </div>`
+    <strong>${city.name}, ${city.country}</strong><br/>
+    <span style="opacity:0.8">${city.dish}</span><br/>
+    <a
+      href="/city/${city.id}"
+      style="display:inline-block;margin-top:6px;text-decoration:underline;"
+    >
+      View city →
+    </a>
+  </div>`
 
       // Create popup
       const popup = new mapboxgl.Popup({
