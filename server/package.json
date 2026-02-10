@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "ts-node --esm src/index.ts",
+    "dev": "ts-node --esm src/server.ts",
+    "dev:db": "ts-node --esm src/index.ts",
     "seed": "ts-node --esm seed.ts"
   },
   "dependencies": {
