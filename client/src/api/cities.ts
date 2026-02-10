@@ -28,3 +28,16 @@ export async function fetchCityById(
 
   return res.json()
 }
+export async function fetchCityById(
+  id: string,
+): Promise<City> {
+  const res = await fetch(
+    `${API_BASE}/cities/${id}`,
+  )
+
+  if (!res.ok) {
+    throw new Error('City not found')
+  }
+
+  return res.json()
+}
