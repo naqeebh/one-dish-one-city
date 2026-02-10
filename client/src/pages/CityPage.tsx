@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom'
 import { cities } from '../data/cities'
+import dishPlaceholder from '../assets/dish-placeholder.jpg'
 
 export default function CityPage() {
   // 1. Read the dynamic :id from the URL
@@ -43,7 +44,17 @@ export default function CityPage() {
       </header>
 
       {/* Content */}
-      <main className="px-6 py-8 max-w-3xl">
+      <main className="px-6 py-8 max-w-3xl space-y-8">
+        {/* Dish image */}
+        <div className="w-full h-[320px] overflow-hidden rounded-lg bg-neutral-200">
+          <img
+            src={dishPlaceholder}
+            alt={city.dish}
+            className="w-full h-full object-cover"
+          />
+        </div>
+
+        {/* Dish info */}
         <section className="space-y-3">
           <h2 className="text-xl font-medium">
             Signature dish
@@ -56,7 +67,7 @@ export default function CityPage() {
         </section>
 
         {/* Actions */}
-        <div className="mt-10">
+        <div className="mt-6">
           <a
             href="/"
             className="underline opacity-80 hover:opacity-100"

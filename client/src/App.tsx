@@ -5,12 +5,10 @@ import {
 } from 'react-router-dom'
 import Layout from './components/Layout'
 import Home from './pages/Home'
-import CityDetail from './pages/CityDetail'
+import CityPage from './pages/CityPage'
 import Favorites from './pages/Favorites'
 import About from './pages/About'
 import Contact from './pages/Contact'
-import CityPage from './pages/CityPage'
-
 
 export default function App() {
   return (
@@ -19,8 +17,8 @@ export default function App() {
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route
-            path="/city/:slug"
-            element={<CityDetail />}
+            path="/city/:id"
+            element={<CityPage />}
           />
           <Route
             path="/favorites"
@@ -33,10 +31,6 @@ export default function App() {
           <Route
             path="/contact"
             element={<Contact />}
-          />
-          <Route
-            path="/city/:id"
-            element={<CityPage />}
           />
         </Route>
       </Routes>
