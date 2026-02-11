@@ -1,27 +1,34 @@
 import { Router } from 'express'
-import City from '../models/City'
+import { cities } from '../data/cities'
 
 const router = Router()
 
 // GET /api/cities
-router.get('/', async (_req, res) => {
-  const cities = await City.find()
-  res.json(cities)
+router.get('/', (_req, res) => {
+  res.status(200).json({
+    success: true,
+    count: cities.length,
+    data: cities,
+  })
 })
 
-// GET /api/cities/:slug
-router.get('/:slug', async (req, res) => {
-  const city = await City.findOne({
-    slug: req.params.slug,
-  })
+// GET /api/cities/:id
+router.get('/:id', (req, res) => {
+  const city = cities.find(
+    (city) => city.id === req.params.id,
+  )
 
   if (!city) {
-    return res
-      .status(404)
-      .json({ message: 'City not found' })
+    return res.status(404).json({
+      success: false,
+      message: 'City not found',
+    })
   }
 
-  res.json(city)
+  res.status(200).json({
+    success: true,
+    data: city,
+  })
 })
 
 export default router
