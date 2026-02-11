@@ -3,9 +3,15 @@ import { cities } from '../data/cities.ts'
 
 const router = Router()
 
+console.log('Cities router loaded')
+
 // GET /api/cities
 router.get('/', (_req, res) => {
-  res.json(cities)
+  res.status(200).json({
+    success: true,
+    count: cities.length,
+    data: cities,
+  })
 })
 
 // GET /api/cities/:id
@@ -15,12 +21,16 @@ router.get('/:id', (req, res) => {
   )
 
   if (!city) {
-    return res
-      .status(404)
-      .json({ message: 'City not found' })
+    return res.status(404).json({
+      success: false,
+      message: 'City not found',
+    })
   }
 
-  res.json(city)
+  res.status(200).json({
+    success: true,
+    data: city,
+  })
 })
 
 export default router
