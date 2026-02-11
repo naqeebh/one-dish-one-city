@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import mapboxgl from 'mapbox-gl'
 import {
   fetchCities,
@@ -15,9 +16,11 @@ export default function Map() {
   const mapInstanceRef =
     useRef<mapboxgl.Map | null>(null)
 
+  const navigate = useNavigate()
+
   useEffect(() => {
     if (!mapRef.current) return
-    if (mapInstanceRef.current) return // Prevent StrictMode double init
+    if (mapInstanceRef.current) return
 
     async function initMap() {
       try {
@@ -36,16 +39,16 @@ export default function Map() {
 
         mapInstanceRef.current = map
 
-        // Calm interactions (editorial feel)
+        // Calm editorial interaction
         map.dragRotate.disable()
         map.touchZoomRotate.disableRotation()
         map.doubleClickZoom.disable()
         map.scrollZoom.setWheelZoomRate(1 / 600)
+        map.dragPan.disable()
 
         const bounds = new mapboxgl.LngLatBounds()
 
         map.on('load', () => {
-          // Subtle softness
           map.setFog({
             range: [-1, 2],
             color: '#f8fafc',
@@ -56,7 +59,7 @@ export default function Map() {
           cities.forEach((city) => {
             const { lng, lat } = city.coordinates
 
-            // Premium ring marker
+            // Stable marker (no scaling)
             const el =
               document.createElement('div')
 
@@ -66,15 +69,56 @@ export default function Map() {
               bg-orange-500
               shadow-lg
               ring-2 ring-white/70
-              transition-all duration-200
-              hover:scale-125
-              hover:shadow-xl
               cursor-pointer
             `
 
-            new mapboxgl.Marker(el)
+            const popup = new mapboxgl.Popup({
+              offset: 15,
+              closeButton: false,
+              closeOnClick: false,
+            }).setHTML(`
+              <div style="font-family: serif; padding: 6px 10px;">
+                <div style="font-weight: 600;">${city.name}</div>
+                <div style="font-size: 13px; color: #6b7280;">
+                  ${city.dish}
+                </div>
+              </div>
+            `)
+
+            const marker = new mapboxgl.Marker({
+              element: el,
+              anchor: 'center',
+            })
               .setLngLat([lng, lat])
               .addTo(map)
+
+            // Hover preview
+            marker
+              .getElement()
+              .addEventListener(
+                'mouseenter',
+                () => {
+                  popup
+                    .setLngLat([lng, lat])
+                    .addTo(map)
+                },
+              )
+
+            marker
+              .getElement()
+              .addEventListener(
+                'mouseleave',
+                () => {
+                  popup.remove()
+                },
+              )
+
+            // Click → navigate
+            marker
+              .getElement()
+              .addEventListener('click', () => {
+                navigate(`/city/${city.id}`)
+              })
 
             bounds.extend([lng, lat])
           })
@@ -100,12 +144,12 @@ export default function Map() {
         mapInstanceRef.current = null
       }
     }
-  }, [])
+  }, [navigate])
 
   return (
     <div
       ref={mapRef}
       className="w-full h-[700px] rounded-3xl shadow-xl overflow-hidden bg-blue-50/30"
     />
-  )  
+  )
 }
