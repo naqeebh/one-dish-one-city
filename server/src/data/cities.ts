@@ -1,7 +1,7 @@
 import {
   citiesSchema,
   type City,
-} from '../schemas/city.schema'
+} from '../schemas/city.schema.ts'
 
 export const cities: City[] = [
   {
