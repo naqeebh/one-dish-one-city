@@ -1,17 +1,7 @@
-export type City = {
-  id: string
-  cityName: string
-  country: string
-  coordinates: {
-    lat: number
-    lng: number
-  }
-  dish: {
-    name: string
-    description: string
-    image: string // static image filename
-  }
-}
+import {
+  citiesSchema,
+  type City,
+} from '../schemas/city.schema'
 
 export const cities: City[] = [
   {
@@ -180,3 +170,5 @@ export const cities: City[] = [
     },
   },
 ]
+
+citiesSchema.parse(cities)
