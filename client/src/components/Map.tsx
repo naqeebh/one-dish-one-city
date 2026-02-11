@@ -1,10 +1,6 @@
-import {
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
+import { useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import mapboxgl from 'mapbox-gl'
-import 'mapbox-gl/dist/mapbox-gl.css'
 import {
   fetchCities,
   type City,
@@ -17,108 +13,143 @@ export default function Map() {
   const mapRef = useRef<HTMLDivElement | null>(
     null,
   )
-  const mapInstance = useRef<mapboxgl.Map | null>(
-    null,
-  )
+  const mapInstanceRef =
+    useRef<mapboxgl.Map | null>(null)
 
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (!mapRef.current) return
-    if (mapInstance.current) return // prevent double init (StrictMode)
+    if (mapInstanceRef.current) return
 
-    const map = new mapboxgl.Map({
-      container: mapRef.current,
-      style: 'mapbox://styles/mapbox/dark-v11',
-      center: [0, 20],
-      zoom: 1.5,
-    })
-
-    mapInstance.current = map
-
-    // ✅ Force flat map after style loads
-    map.on('style.load', () => {
-      map.setProjection('mercator')
-    })
-
-    map.on('load', async () => {
+    async function initMap() {
       try {
         const cities: City[] = await fetchCities()
-        console.log('Fetched cities:', cities)
 
-        cities.forEach((city) => {
-          if (
-            !city.coordinates ||
-            typeof city.coordinates.lng !==
-              'number' ||
-            typeof city.coordinates.lat !==
-              'number'
-          ) {
-            console.warn(
-              'Invalid coordinates:',
-              city,
-            )
-            return
-          }
-
-          const popup = new mapboxgl.Popup({
-            offset: 16,
-            closeButton: false,
-          }).setHTML(`
-            <div style="font-family:system-ui;font-size:14px;">
-              <strong>${city.cityName}, ${city.country}</strong><br/>
-              <span style="opacity:0.8">${city.dish.name}</span><br/>
-              <a
-                href="/city/${city.id}"
-                style="display:inline-block;margin-top:6px;text-decoration:underline;"
-              >
-                View city →
-              </a>
-            </div>
-          `)
-
-          new mapboxgl.Marker()
-            .setLngLat([
-              city.coordinates.lng,
-              city.coordinates.lat,
-            ])
-            .setPopup(popup)
-            .addTo(map)
+        const map = new mapboxgl.Map({
+          container: mapRef.current!,
+          style:
+            'mapbox://styles/mapbox/light-v11',
+          projection: 'mercator',
+          center: [10, 20],
+          zoom: 1.8,
+          minZoom: 1.5,
+          maxZoom: 4,
         })
 
-        setLoading(false)
-      } catch (err) {
-        console.error('Fetch error:', err)
-        setError(true)
-        setLoading(false)
+        mapInstanceRef.current = map
+
+        // Calm editorial interaction
+        map.dragRotate.disable()
+        map.touchZoomRotate.disableRotation()
+        map.doubleClickZoom.disable()
+        map.scrollZoom.setWheelZoomRate(1 / 600)
+        map.dragPan.disable()
+
+        const bounds = new mapboxgl.LngLatBounds()
+
+        map.on('load', () => {
+          map.setFog({
+            range: [-1, 2],
+            color: '#f8fafc',
+            'high-color': '#e2e8f0',
+            'space-color': '#ffffff',
+          })
+
+          cities.forEach((city) => {
+            const { lng, lat } = city.coordinates
+
+            // Stable marker (no scaling)
+            const el =
+              document.createElement('div')
+
+            el.className = `
+              w-4 h-4
+              rounded-full
+              bg-orange-500
+              shadow-lg
+              ring-2 ring-white/70
+              cursor-pointer
+            `
+
+            const popup = new mapboxgl.Popup({
+              offset: 15,
+              closeButton: false,
+              closeOnClick: false,
+            }).setHTML(`
+              <div style="font-family: serif; padding: 6px 10px;">
+                <div style="font-weight: 600;">${city.name}</div>
+                <div style="font-size: 13px; color: #6b7280;">
+                  ${city.dish}
+                </div>
+              </div>
+            `)
+
+            const marker = new mapboxgl.Marker({
+              element: el,
+              anchor: 'center',
+            })
+              .setLngLat([lng, lat])
+              .addTo(map)
+
+            // Hover preview
+            marker
+              .getElement()
+              .addEventListener(
+                'mouseenter',
+                () => {
+                  popup
+                    .setLngLat([lng, lat])
+                    .addTo(map)
+                },
+              )
+
+            marker
+              .getElement()
+              .addEventListener(
+                'mouseleave',
+                () => {
+                  popup.remove()
+                },
+              )
+
+            // Click → navigate
+            marker
+              .getElement()
+              .addEventListener('click', () => {
+                navigate(`/city/${city.id}`)
+              })
+
+            bounds.extend([lng, lat])
+          })
+
+          if (!bounds.isEmpty()) {
+            map.fitBounds(bounds, {
+              padding: 120,
+              maxZoom: 3,
+              duration: 900,
+            })
+          }
+        })
+      } catch (error) {
+        console.error('Error loading map:', error)
       }
-    })
+    }
+
+    initMap()
 
     return () => {
-      map.remove()
-      mapInstance.current = null
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove()
+        mapInstanceRef.current = null
+      }
     }
-  }, [])
+  }, [navigate])
 
   return (
-    <div className="relative w-full h-[500px] rounded-lg overflow-hidden">
-      <div
-        ref={mapRef}
-        className="w-full h-full"
-      />
-
-      {loading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/40 text-white">
-          Loading map…
-        </div>
-      )}
-
-      {error && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/60 text-red-400">
-          Failed to load map data
-        </div>
-      )}
-    </div>
+    <div
+      ref={mapRef}
+      className="w-full h-[700px] rounded-3xl shadow-xl overflow-hidden bg-blue-50/30"
+    />
   )
 }
