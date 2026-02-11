@@ -4,17 +4,20 @@ import {
   useState,
 } from 'react'
 import mapboxgl from 'mapbox-gl'
+import 'mapbox-gl/dist/mapbox-gl.css'
 import {
   fetchCities,
   type City,
 } from '../api/cities'
 
-// Mapbox needs the access token BEFORE creating the map
 mapboxgl.accessToken =
   import.meta.env.VITE_MAPBOX_TOKEN
 
 export default function Map() {
   const mapRef = useRef<HTMLDivElement | null>(
+    null,
+  )
+  const mapInstance = useRef<mapboxgl.Map | null>(
     null,
   )
 
@@ -23,19 +26,46 @@ export default function Map() {
 
   useEffect(() => {
     if (!mapRef.current) return
+    if (mapInstance.current) return // prevent double init (StrictMode)
 
     const map = new mapboxgl.Map({
       container: mapRef.current,
       style: 'mapbox://styles/mapbox/dark-v11',
       center: [0, 20],
       zoom: 1.5,
-      projection: 'mercator',
     })
 
-    fetchCities()
-      .then((cities: City[]) => {
+    mapInstance.current = map
+
+    // ✅ Force flat map after style loads
+    map.on('style.load', () => {
+      map.setProjection('mercator')
+    })
+
+    map.on('load', async () => {
+      try {
+        const cities: City[] = await fetchCities()
+        console.log('Fetched cities:', cities)
+
         cities.forEach((city) => {
-          const popupHtml = `
+          if (
+            !city.coordinates ||
+            typeof city.coordinates.lng !==
+              'number' ||
+            typeof city.coordinates.lat !==
+              'number'
+          ) {
+            console.warn(
+              'Invalid coordinates:',
+              city,
+            )
+            return
+          }
+
+          const popup = new mapboxgl.Popup({
+            offset: 16,
+            closeButton: false,
+          }).setHTML(`
             <div style="font-family:system-ui;font-size:14px;">
               <strong>${city.cityName}, ${city.country}</strong><br/>
               <span style="opacity:0.8">${city.dish.name}</span><br/>
@@ -46,12 +76,7 @@ export default function Map() {
                 View city →
               </a>
             </div>
-          `
-
-          const popup = new mapboxgl.Popup({
-            offset: 16,
-            closeButton: false,
-          }).setHTML(popupHtml)
+          `)
 
           new mapboxgl.Marker()
             .setLngLat([
@@ -61,35 +86,39 @@ export default function Map() {
             .setPopup(popup)
             .addTo(map)
         })
-      })
-      .catch(() => setError(true))
-      .finally(() => setLoading(false))
 
-    return () => map.remove()
+        setLoading(false)
+      } catch (err) {
+        console.error('Fetch error:', err)
+        setError(true)
+        setLoading(false)
+      }
+    })
+
+    return () => {
+      map.remove()
+      mapInstance.current = null
+    }
   }, [])
 
-  if (loading) {
-    return (
-      <div className="w-full h-[500px] flex items-center justify-center">
-        Loading map…
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className="w-full h-[500px] flex items-center justify-center">
-        Failed to load map data
-      </div>
-    )
-  }
-
   return (
-    <div className="w-full h-[500px] rounded-lg overflow-hidden">
+    <div className="relative w-full h-[500px] rounded-lg overflow-hidden">
       <div
         ref={mapRef}
         className="w-full h-full"
       />
+
+      {loading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/40 text-white">
+          Loading map…
+        </div>
+      )}
+
+      {error && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/60 text-red-400">
+          Failed to load map data
+        </div>
+      )}
     </div>
   )
 }
