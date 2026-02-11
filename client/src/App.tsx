@@ -5,7 +5,7 @@ import {
 } from 'react-router-dom'
 import Layout from './components/Layout'
 import Home from './pages/Home'
-import CityPage from './pages/CityPage'
+import CityDetail from './pages/CityDetail'
 import Favorites from './pages/Favorites'
 import About from './pages/About'
 import Contact from './pages/Contact'
@@ -18,7 +18,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route
             path="/city/:id"
-            element={<CityPage />}
+            element={<CityDetail />}
           />
           <Route
             path="/favorites"

@@ -15,19 +15,21 @@ export type City = {
 
 const API_BASE = 'http://localhost:4000/api'
 
-export async function fetchCityById(
-  id: string,
-): Promise<City> {
-  const res = await fetch(
-    `${API_BASE}/cities/${id}`,
-  )
+export async function fetchCities(): Promise<
+  City[]
+> {
+  const res = await fetch(`${API_BASE}/cities`, {
+    cache: 'no-store',
+  })
 
   if (!res.ok) {
-    throw new Error('City not found')
+    throw new Error('Failed to fetch cities')
   }
 
-  return res.json()
+  const result = await res.json()
+  return result.data
 }
+
 export async function fetchCityById(
   id: string,
 ): Promise<City> {
@@ -39,5 +41,7 @@ export async function fetchCityById(
     throw new Error('City not found')
   }
 
-  return res.json()
+  const result = await res.json()
+
+  return result.data 
 }
