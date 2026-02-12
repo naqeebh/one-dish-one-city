@@ -229,6 +229,21 @@ export const cities: City[] = [
       image: 'char-siu.jpg',
     },
   },
+  {
+    id: 'new-orleans',
+    cityName: 'New Orleans',
+    country: 'United States',
+    coordinates: {
+      lat: 29.9511,
+      lng: -90.0715,
+    },
+    dish: {
+      name: 'Gumbo',
+      description:
+        'Gumbo is a signature dish of Louisiana, blending Creole and Cajun influences. Made with a dark roux, shrimp, sausage, okra, and aromatic vegetables, it is traditionally served over rice and reflects the rich cultural heritage of New Orleans.',
+      image: 'gumbo.jpg',
+    },
+  },
 ]
 
 citiesSchema.parse(cities)
