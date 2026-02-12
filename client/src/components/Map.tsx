@@ -24,6 +24,7 @@ const countryFlags: Record<string, string> = {
   Germany: '🇩🇪',
   Nigeria: '🇳🇬',
   Thailand: '🇹🇭',
+  Ethiopia: '🇪🇹',
 }
 
 // 🎴 Hover Card Creator
