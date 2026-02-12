@@ -229,6 +229,21 @@ export const cities: City[] = [
       image: 'char-siu.jpg',
     },
   },
+  {
+    id: 'lima',
+    cityName: 'Lima',
+    country: 'Peru',
+    coordinates: {
+      lat: -12.0464,
+      lng: -77.0428,
+    },
+    dish: {
+      name: 'Ceviche',
+      description:
+        'Ceviche is Peru’s national dish, made from fresh raw fish cured in lime juice and mixed with red onion, chili peppers, and cilantro. In Lima, it is traditionally served with sweet potato and corn, highlighting the bright and refreshing flavors of coastal Peruvian cuisine.',
+      image: 'ceviche.jpg',
+    },
+  },
 ]
 
 citiesSchema.parse(cities)
