@@ -199,6 +199,21 @@ export const cities: City[] = [
       image: 'pad-thai.jpg',
     },
   },
+  {
+    id: 'addis-ababa',
+    cityName: 'Addis Ababa',
+    country: 'Ethiopia',
+    coordinates: {
+      lat: 8.9806,
+      lng: 38.7578,
+    },
+    dish: {
+      name: 'Doro Wat',
+      description:
+        'Doro Wat is Ethiopia’s national dish, a slow-cooked chicken stew made with berbere spices, garlic, ginger, and onions. It is traditionally served with injera, a soft fermented flatbread used to scoop up the rich, aromatic sauce.',
+      image: 'doro-wat.jpg',
+    },
+  },
 ]
 
 citiesSchema.parse(cities)
