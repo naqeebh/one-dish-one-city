@@ -15,7 +15,7 @@ const countryFlags: Record<string, string> = {
   Japan: '🇯🇵',
   Italy: '🇮🇹',
   Mexico: '🇲🇽',
-  USA: '🇺🇸',
+  'United States': '🇺🇸',
   Brazil: '🇧🇷',
   'United Kingdom': '🇬🇧',
   'South Africa': '🇿🇦',
@@ -23,6 +23,7 @@ const countryFlags: Record<string, string> = {
   Australia: '🇦🇺',
   Germany: '🇩🇪',
   Nigeria: '🇳🇬',
+  Thailand: '🇹🇭',
 }
 
 // 🎴 Hover Card Creator
