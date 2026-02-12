@@ -169,6 +169,21 @@ export const cities: City[] = [
       image: 'ramen.jpg',
     },
   },
+  {
+    id: 'lagos',
+    cityName: 'Lagos',
+    country: 'Nigeria',
+    coordinates: {
+      lat: 6.5244,
+      lng: 3.3792,
+    },
+    dish: {
+      name: 'Jollof Rice',
+      description:
+        'A vibrant West African rice dish cooked with tomatoes, peppers, onions, and spices, often served with fried plantain or grilled meat.',
+      image: 'jollof-rice.jpg',
+    },
+  },
 ]
 
 citiesSchema.parse(cities)
