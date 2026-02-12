@@ -1,69 +1,104 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
 import {
-  fetchCityById,
-  type City,
-} from '../api/cities'
+  useParams,
+  useNavigate,
+} from 'react-router-dom'
+import { fetchCityById } from '../api/cities'
+import type { City } from '../api/cities'
 
 export default function CityDetail() {
-  const { id } = useParams<{ id: string }>()
+  const { id } = useParams()
+  const navigate = useNavigate()
+
   const [city, setCity] = useState<City | null>(
     null,
   )
-  const [error, setError] = useState<
-    string | null
-  >(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     if (!id) return
 
     fetchCityById(id)
-      .then(setCity)
-      .catch(() => setError('City not found'))
+      .then((data) => {
+        setCity(data)
+        setLoading(false)
+      })
+      .catch(() => {
+        setError(true)
+        setLoading(false)
+      })
   }, [id])
 
-  if (error) {
+  if (loading) {
     return (
-      <p className="text-sm text-red-600">
-        {error}
-      </p>
+      <div className="min-h-screen bg-[#faf8f2] flex items-center justify-center">
+        <p>Loading city...</p>
+      </div>
     )
   }
 
-  if (!city) {
+  if (error || !city) {
     return (
-      <p className="text-sm text-neutral-500">
-        Loading city…
-      </p>
+      <div className="min-h-screen bg-[#faf8f2] flex items-center justify-center">
+        <p>City not found.</p>
+      </div>
     )
   }
 
   return (
-    <section>
-      <h1 className="text-3xl font-bold">
-        {city.cityName}
-      </h1>
-
-      <p className="mt-2 text-neutral-600">
-        {city.country}
-      </p>
-
-      <div className="mt-6">
-        <h2 className="text-xl font-semibold">
-          {city.dish.name}
-        </h2>
-
-        <p className="mt-2 text-neutral-600">
-          {city.dish.description}
-        </p>
-
-        <img
-          src={`/images/dishes/${city.dish.image}`}
-          alt={city.dish.name}
-          className="mt-4 rounded-md"
-        />
+    <div className="min-h-screen bg-stone-50 text-black">
+      <div className="max-w-6xl mx-auto px-8 py-20">
+  
+        {/* Back Button */}
+        <div className="mb-12">
+          <button
+            onClick={() => navigate("/")}
+            className="text-sm hover:underline"
+          >
+            ← Back to Map
+          </button>
+        </div>
+  
+        {/* Brand */}
+        <div className="text-center mb-6">
+          <p className="text-xs tracking-[0.3em] uppercase text-neutral-500">
+            One Dish One City
+          </p>
+        </div>
+  
+        {/* Title */}
+        <div className="text-center mb-20">
+          <div className="flex items-center justify-center gap-4">
+            <h1 className="text-6xl font-serif tracking-tight">
+              {city.cityName}
+            </h1>
+            <span className="text-4xl">🇩🇪</span>
+          </div>
+        </div>
+  
+        {/* Hero Image */}
+        <div className="mb-24">
+          <img
+            src={`/images/dishes/${city.dish.image}`}
+            alt={city.dish.name}
+            className="w-full h-[520px] object-cover"
+          />
+        </div>
+  
+        {/* Cultural Section */}
+        <div className="max-w-3xl mx-auto text-center mb-28">
+          <h2 className="text-3xl font-serif mb-8">
+            The Story of {city.dish.name}
+          </h2>
+  
+          <p className="text-lg leading-relaxed mb-6">
+            Currywurst is more than a street snack — it is a symbol
+            of post-war Berlin resilience.
+          </p>
+        </div>
+  
       </div>
-    </section>
+    </div>
   )
-
-}
+}  
