@@ -244,6 +244,21 @@ export const cities: City[] = [
       image: 'ceviche.jpg',
     },
   },
+  {
+    id: 'beirut',
+    cityName: 'Beirut',
+    country: 'Lebanon',
+    coordinates: {
+      lat: 33.8938,
+      lng: 35.5018,
+    },
+    dish: {
+      name: 'Manakish',
+      description:
+        'Manakish is a traditional Lebanese flatbread topped with za’atar and olive oil, baked fresh in stone ovens across Beirut. It is a staple of daily life and reflects the aromatic and vibrant flavors of Lebanese cuisine.',
+      image: 'manakish.jpg',
+    },
+  },
 ]
 
 citiesSchema.parse(cities)
