@@ -184,6 +184,21 @@ export const cities: City[] = [
       image: 'jollof-rice.jpg',
     },
   },
+  {
+    id: 'bangkok',
+    cityName: 'Bangkok',
+    country: 'Thailand',
+    coordinates: {
+      lat: 13.7563,
+      lng: 100.5018,
+    },
+    dish: {
+      name: 'Pad Thai',
+      description:
+        'Pad Thai is Thailand’s most iconic street food dish. Stir-fried rice noodles are tossed with tamarind sauce, eggs, tofu or shrimp, bean sprouts, and crushed peanuts, creating a perfect balance of sweet, sour, and savory flavors.',
+      image: 'pad-thai.jpg',
+    },
+  },
 ]
 
 citiesSchema.parse(cities)
