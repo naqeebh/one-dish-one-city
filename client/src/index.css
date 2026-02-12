@@ -1,1 +1,23 @@
 @import "tailwindcss";
+
+.odoc-popup .mapboxgl-popup-content {
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+  
+  .odoc-popup .mapboxgl-popup-tip {
+    display: none;
+  }
+  
+  .odoc-preview {
+    transform: translateY(6px);
+    opacity: 0;
+    transition: transform 150ms ease, opacity 150ms ease;
+  }
+  
+  .odoc-preview.is-open {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  
