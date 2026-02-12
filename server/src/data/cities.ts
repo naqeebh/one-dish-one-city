@@ -214,6 +214,21 @@ export const cities: City[] = [
       image: 'doro-wat.jpg',
     },
   },
+  {
+    id: 'hong-kong',
+    cityName: 'Hong Kong',
+    country: 'Hong Kong',
+    coordinates: {
+      lat: 22.3193,
+      lng: 114.1694,
+    },
+    dish: {
+      name: 'Char Siu',
+      description:
+        'Char Siu is Hong Kong’s famous Cantonese barbecue pork, marinated in honey, five-spice, soy sauce, and hoisin before being roasted to achieve its signature glossy red glaze. It is commonly served over rice or inside steamed buns.',
+      image: 'char-siu.jpg',
+    },
+  },
 ]
 
 citiesSchema.parse(cities)
