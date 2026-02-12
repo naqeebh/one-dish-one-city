@@ -259,6 +259,21 @@ export const cities: City[] = [
       image: 'manakish.jpg',
     },
   },
+  {
+    id: 'islamabad',
+    cityName: 'Islamabad',
+    country: 'Pakistan',
+    coordinates: {
+      lat: 33.6844,
+      lng: 73.0479,
+    },
+    dish: {
+      name: 'Biryani',
+      description:
+        'Biryani is one of Pakistan’s most iconic dishes, made with fragrant basmati rice layered with spiced chicken or beef, saffron, and fresh herbs. Slow-cooked to develop deep, aromatic flavors, it represents the richness of Pakistani cuisine.',
+      image: 'biryani.jpg',
+    },
+  },
 ]
 
 citiesSchema.parse(cities)
