@@ -1,104 +1,148 @@
 import { useEffect, useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
 import {
-  useParams,
-  useNavigate,
-} from 'react-router-dom'
-import { fetchCityById } from '../api/cities'
-import type { City } from '../api/cities'
+  fetchCityById,
+  type City,
+} from '../api/cities'
 
 export default function CityDetail() {
-  const { id } = useParams()
-  const navigate = useNavigate()
-
+  const { id } = useParams<{ id: string }>()
   const [city, setCity] = useState<City | null>(
     null,
   )
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(false)
+  const [error, setError] = useState<
+    string | null
+  >(null)
 
   useEffect(() => {
     if (!id) return
 
     fetchCityById(id)
-      .then((data) => {
-        setCity(data)
-        setLoading(false)
-      })
-      .catch(() => {
-        setError(true)
-        setLoading(false)
-      })
+      .then(setCity)
+      .catch(() => setError('City not found'))
   }, [id])
 
-  if (loading) {
+  if (error) {
     return (
-      <div className="min-h-screen bg-[#faf8f2] flex items-center justify-center">
-        <p>Loading city...</p>
+      <div className="text-center py-20 text-neutral-400">
+        {error}
       </div>
     )
   }
 
-  if (error || !city) {
+  if (!city) {
     return (
-      <div className="min-h-screen bg-[#faf8f2] flex items-center justify-center">
-        <p>City not found.</p>
+      <div className="text-center py-20 text-neutral-400">
+        Loading city…
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-stone-50 text-black">
-      <div className="max-w-6xl mx-auto px-8 py-20">
-  
-        {/* Back Button */}
-        <div className="mb-12">
-          <button
-            onClick={() => navigate("/")}
-            className="text-sm hover:underline"
-          >
-            ← Back to Map
-          </button>
-        </div>
-  
-        {/* Brand */}
-        <div className="text-center mb-6">
-          <p className="text-xs tracking-[0.3em] uppercase text-neutral-500">
-            One Dish One City
-          </p>
-        </div>
-  
-        {/* Title */}
-        <div className="text-center mb-20">
-          <div className="flex items-center justify-center gap-4">
-            <h1 className="text-6xl font-serif tracking-tight">
-              {city.cityName}
-            </h1>
-            <span className="text-4xl">🇩🇪</span>
-          </div>
-        </div>
-  
-        {/* Hero Image */}
-        <div className="mb-24">
+    <div className="max-w-7xl mx-auto px-6 py-12">
+      {/* Top Row */}
+      <div className="flex items-center justify-between mb-16">
+        <Link
+          to="/"
+          className="text-sm text-neutral-400 hover:text-white transition"
+        >
+          ← Back to Map
+        </Link>
+
+        <p className="text-xs tracking-[0.3em] text-neutral-500 uppercase">
+          One Dish One City
+        </p>
+      </div>
+
+      {/* City Title */}
+      <div className="text-center mb-20">
+        <h1 className="text-5xl md:text-6xl font-serif text-white">
+          {city.cityName}
+        </h1>
+        <p className="mt-4 text-neutral-400">
+          {city.country}
+        </p>
+      </div>
+
+      {/* Two Column Layout */}
+      <div className="grid md:grid-cols-2 gap-16 items-start">
+        {/* LEFT — IMAGE */}
+        <div>
           <img
             src={`/images/dishes/${city.dish.image}`}
             alt={city.dish.name}
-            className="w-full h-[520px] object-cover"
+            className="w-full h-[500px] object-cover rounded-lg shadow-xl"
           />
         </div>
-  
-        {/* Cultural Section */}
-        <div className="max-w-3xl mx-auto text-center mb-28">
-          <h2 className="text-3xl font-serif mb-8">
-            The Story of {city.dish.name}
-          </h2>
-  
-          <p className="text-lg leading-relaxed mb-6">
-            Currywurst is more than a street snack — it is a symbol
-            of post-war Berlin resilience.
-          </p>
+
+        {/* RIGHT — STORY + RECIPE */}
+        <div className="space-y-12">
+          {/* Story */}
+          <section>
+            <h2 className="text-2xl font-serif mb-6 text-white">
+              The Story of {city.dish.name}
+            </h2>
+
+            <div className="space-y-5 text-neutral-300 leading-relaxed text-[17px]">
+              <p>{city.dish.description}</p>
+
+              <p>
+                This dish reflects the culture,
+                resilience, and everyday life of{' '}
+                {city.cityName}. From street
+                vendors to family kitchens, it
+                remains a culinary symbol of the
+                city.
+              </p>
+
+              <p>
+                Today, it continues to connect
+                generations through flavour and
+                tradition.
+              </p>
+            </div>
+          </section>
+
+          {/* Recipe */}
+          <section>
+            <h2 className="text-2xl font-serif mb-6 text-white">
+              How to Make {city.dish.name}
+            </h2>
+
+            <div className="space-y-6 text-neutral-300 text-[16px] leading-relaxed">
+              <div>
+                <h3 className="uppercase text-xs tracking-widest text-neutral-500 mb-3">
+                  Ingredients
+                </h3>
+                <ul className="list-disc list-inside space-y-2">
+                  <li>Primary ingredient</li>
+                  <li>Spices & seasoning</li>
+                  <li>Oil or butter</li>
+                  <li>Optional garnish</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="uppercase text-xs tracking-widest text-neutral-500 mb-3">
+                  Instructions
+                </h3>
+                <ol className="list-decimal list-inside space-y-3">
+                  <li>
+                    Prepare all ingredients.
+                  </li>
+                  <li>
+                    Cook according to tradition.
+                  </li>
+                  <li>
+                    Plate carefully and serve
+                    warm.
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </section>
         </div>
-  
       </div>
     </div>
   )
-}  
+}
