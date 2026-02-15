@@ -9,6 +9,8 @@ import CityDetail from './pages/CityDetail'
 import Favorites from './pages/Favorites'
 import About from './pages/About'
 import Contact from './pages/Contact'
+import Cities from './pages/Cities'
+
 
 export default function App() {
   return (
@@ -16,6 +18,10 @@ export default function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
+          <Route
+            path="/cities"
+            element={<Cities />}
+          />
           <Route
             path="/city/:id"
             element={<CityDetail />}
