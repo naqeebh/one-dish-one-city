@@ -7,7 +7,7 @@ export default function NavBar() {
         {/* Left Navigation */}
         <nav className="flex items-center gap-10 text-sm uppercase tracking-[0.2em] font-sans text-neutral-300">
           <NavItem to="/">Home</NavItem>
-          <NavItem to="/">Cities</NavItem>
+          <NavItem to="/cities">Cities</NavItem>
           <NavItem to="/about">About</NavItem>
         </nav>
         {/* Right Search Placeholder */}
