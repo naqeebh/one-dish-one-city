@@ -73,7 +73,7 @@ export const cities: City[] = [
       lng: 14.2681,
     },
     dish: {
-      name: 'Pizza Margherita',
+      name: 'Margherita Pizza',
       description:
         'The original Neapolitan pizza with tomato sauce, mozzarella, basil, and olive oil.',
       image: 'pizza-margherita.jpg',
@@ -106,7 +106,7 @@ export const cities: City[] = [
       name: 'Currywurst',
       description:
         'A Berlin street-food staple made from pork sausage topped with spiced ketchup and curry powder.',
-      image: 'currywurst.jpg',
+      image: 'curry-wurst.jpg',
     },
   },
   {
@@ -272,6 +272,36 @@ export const cities: City[] = [
       description:
         'Biryani is one of Pakistan’s most iconic dishes, made with fragrant basmati rice layered with spiced chicken or beef, saffron, and fresh herbs. Slow-cooked to develop deep, aromatic flavors, it represents the richness of Pakistani cuisine.',
       image: 'biryani.jpg',
+    },
+  },
+  {
+    id: 'marrakesh',
+    cityName: 'Marrakesh',
+    country: 'Morocco',
+    coordinates: {
+      lat: 31.6295,
+      lng: -7.9811,
+    },
+    dish: {
+      name: 'Tagine',
+      description:
+        'Tagine is a traditional Moroccan slow-cooked stew made with tender meat, vegetables, preserved lemon, olives, and aromatic spices. Cooked in a distinctive clay pot, it represents the rich and layered flavors of Marrakesh cuisine.',
+      image: 'tagine.jpg',
+    },
+  },
+  {
+    id: 'los-angeles',
+    cityName: 'Los Angeles',
+    country: 'United States',
+    coordinates: {
+      lat: 34.0522,
+      lng: -118.2437,
+    },
+    dish: {
+      name: 'Street Tacos',
+      description:
+        'Los Angeles is famous for its vibrant taco culture, especially street-style tacos filled with carne asada, al pastor, or carnitas, topped with fresh cilantro, onion, and lime. The city’s Mexican influence defines its food identity.',
+      image: 'la-tacos.jpg',
     },
   },
 ]
