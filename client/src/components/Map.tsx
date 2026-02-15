@@ -29,6 +29,7 @@ const countryFlags: Record<string, string> = {
   Peru: '🇵🇪',
   Lebanon: '🇱🇧',
   Pakistan: '🇵🇰',
+  Morocco: '🇲🇦',
 }
 
 // 🎴 Hover Card Creator
@@ -41,7 +42,7 @@ function createHoverCard(city: City) {
 
   // IMAGE
   const img = document.createElement('img')
-  img.src = city.dish.image
+  img.src = `/images/dishes/${city.dish.image}`
   img.alt = city.dish.name
   img.className =
     'w-full h-[200px] object-cover block'
